@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ContactsPage {
   
   @override
@@ -166,5 +168,5 @@ class ContactsPage {
     } else {
       return const SizedBox.shrink();
     }
-    }
+  }
 }

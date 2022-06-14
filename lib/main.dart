@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'account/LoginPage.dart';
+import 'home/HomePage.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,12 +33,12 @@ class GachaAnon extends StatefulWidget {
 class _GachaAnonState extends State<GachaAnon> {
   int _selectedIndex = 1;
 
-  static List<TabItem> _bottomTabs = [
+  static List<TabItem> bottomTabs = [
     TabItem('Login'),
     TabItem('Home'),
-  ]
+  ];
 
-  static List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> widgetOptions = <Widget>[
     LoginPage(),
     HomePage(),
   ];
@@ -48,7 +53,7 @@ class _GachaAnonState extends State<GachaAnon> {
     return tabs
       .map((item) =>
         BottomNavigationBarItem(
-          label: item.title;
+          icon: Text( item.title ),
         ),
       )
       .toList();
@@ -58,11 +63,11 @@ class _GachaAnonState extends State<GachaAnon> {
   Widget build(BuildContext context){
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: widgetOptions.elementAt(_selectedIndex),
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-        items: getBottomTabs(this._bottomTabs),
+        items: getBottomTabs(bottomTabs),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),

@@ -1,14 +1,16 @@
+import 'ChatMessage.dart';
+
 class ChatProvider {
 
   Future<void> updateFirestoreData(String collectionPath, String docPath, Map<String, dynamic> dataUpdate) {
-  return firebaseFirestore
+    return firebaseFirestore
       .collection(collectionPath)
       .doc(docPath)
       .update(dataUpdate);
   }
 
   Stream<QuerySnapshot> getChatMessage(String groupChatId, int limit) {
-  return firebaseFirestore
+    return firebaseFirestore
       .collection(FirestoreConstants.pathMessageCollection)
       .doc(groupChatId)
       .collection(groupChatId)
@@ -23,7 +25,7 @@ class ChatProvider {
       .doc(groupChatId)
       .collection(groupChatId)
       .doc(DateTime.now().millisecondsSinceEpoch.toString());
-    ChatMessages chatMessages = ChatMessages(
+    ChatMessage chatMessages = ChatMessage(
       idFrom: currentUserId,
       idTo: peerId,
       timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
