@@ -65,7 +65,8 @@ class _GachaAnonState extends State<GachaAnon> {
     return Scaffold(
       body: Center(
         child: widgetOptions.elementAt(_selectedIndex),
-      ),
+      ), 
+      
 
       bottomNavigationBar: BottomNavigationBar(
         items: getBottomTabs(bottomTabs),
