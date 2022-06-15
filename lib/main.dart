@@ -53,7 +53,8 @@ class _GachaAnonState extends State<GachaAnon> {
     return tabs
       .map((item) =>
         BottomNavigationBarItem(
-          icon: Text( item.title ),
+          icon: Container(height: 0.0,),
+          label: item.title,
         ),
       )
       .toList();
