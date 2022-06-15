@@ -5,6 +5,11 @@ class RegisterPage extends StatefulWidget {
     _RegisterPageState createState() => _RegisterPageState();
 }
 
+class AwaysDisabledFocus extends FocusNode {
+  @override 
+  bool get hasFocus => false;
+}
+
 class _RegisterPageState extends State<RegisterPage> {
   DateTime date = DateTime.now();
 
@@ -68,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                focusNode: AwaysDisabledFocus(),
                 controller: dateController,
                 onTap: () async {
                   DateTime? newDate = await showDatePicker(
