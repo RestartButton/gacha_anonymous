@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import '../main.dart';
 import 'AuthProvider.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -17,7 +17,6 @@ class AwaysDisabledFocus extends FocusNode {
 
 class _RegisterPageState extends State<RegisterPage> {
   DateTime date = DateTime.now();
-  late final AuthProvider _authProvider;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -29,13 +28,18 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
 
     dateController.text = '${date.day}/${date.month}/${date.year}';
-    _authProvider = Provider.of<AuthProvider>(context);
   }
 
   void _register() async {
     if(passwordController.text == confirmController.text) {
-      if(await _authProvider.createAccount(emailController.text, passwordController.text)) {
-
+      if(await AuthProvider.createAccount(emailController.text, passwordController.text)) {
+        Navigator.pushReplacement(
+          context, 
+          PageRouteBuilder(
+            transitionDuration: Duration.zero,
+            pageBuilder: (_,__,___) => GachaAnon(),
+          )
+        );
       }
     } else {
       print('As senhas precisam ser iguais.');
@@ -69,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                obscureText: true,
                 controller: passwordController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -79,6 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                obscureText: true,
                 controller: confirmController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),

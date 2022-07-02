@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gacha_anonymous/main.dart';
-import 'package:provider/provider.dart';
 import 'AuthProvider.dart';
 import 'RegisterPage.dart';
 
@@ -13,7 +12,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  late final AuthProvider _authProvider;
 
   void callRegisterPage(BuildContext context) {
     Navigator.push(
@@ -24,23 +22,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void initState() {
-    super.initState();
-
-    _authProvider = Provider.of<AuthProvider>(context);
-  }
-
   void _login() async {
-    if(await _authProvider.singIn(nameController.text, passwordController.text)) {
-      Navigator.replace(
-        context, 
-        oldRoute: MaterialPageRoute(
-          builder: (context) => LoginPage()
-        ),
-        newRoute: MaterialPageRoute(
-          builder: (context) => GachaAnon()
-        )
-      );
+    if(await AuthProvider.singIn(nameController.text, passwordController.text)) {
+      Navigator.pushReplacement(
+          context, 
+          PageRouteBuilder(
+            transitionDuration: Duration.zero,
+            pageBuilder: (_,__,___) => GachaAnon(),
+          )
+        );
     }
   }
 

@@ -2,17 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AuthProvider extends ChangeNotifier {
+class AuthProvider {
 
-  late FirebaseAuth auth;
+  static late FirebaseAuth _auth;
   late FirebaseFirestore firebaseFirestore;
-  
 
+  static void initAuth() async {
+    _auth = await FirebaseAuth.instance;
+  }
 
-  Future<bool> createAccount(email, password) async {
+  static  Future<bool> createAccount(email, password) async {
     try {
-      await auth.createUserWithEmailAndPassword(email: email, password: password);
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (err) {
       print(err.code);
       print(err.message);
@@ -20,9 +22,9 @@ class AuthProvider extends ChangeNotifier {
     return isLoggedIn();
   }
 
-  Future<bool> singIn(email, password) async {
+  static  Future<bool> singIn(email, password) async {
     try {
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (err) {
       print(err.code);
       print(err.message);
@@ -30,12 +32,12 @@ class AuthProvider extends ChangeNotifier {
     return isLoggedIn();
   }
 
-  Future<void> singOut() async {
-      await auth.signOut();
+  static Future<void> singOut() async {
+      await _auth.signOut();
   }
 
-  bool isLoggedIn() {
-    User? user = auth.currentUser;
+  static bool isLoggedIn() {
+    User? user = _auth.currentUser;
 
     if(user != null) return true;
 

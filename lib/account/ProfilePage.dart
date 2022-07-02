@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gacha_anonymous/main.dart';
+
+import 'AuthProvider.dart';
 
 class ProfilePage extends StatefulWidget {
     @override
@@ -8,7 +11,29 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Container( 
+      padding: const EdgeInsets.only(top: 200),
+      child: ListView( 
+        children: [
+          const Center( 
+            child:Text( "ProfilePage" )
+          ),
+          ElevatedButton(
+            child: const Text('Sair'),
+            onPressed: () {
+              
+              AuthProvider.singOut();
+              Navigator.pushReplacement(
+                context, 
+                PageRouteBuilder(
+                  pageBuilder: (_,__,___) => GachaAnon()
+                )
+              );
+              
+            },
+          ),
+        ]
+      )
+    );
   }
 }

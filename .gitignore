@@ -4,7 +4,7 @@
 *.pyc
 *.swp
 *.iml
-*.yaml
+analysis_options.yaml
 .DS_Store
 .atom/
 .buildlog/
@@ -21,6 +21,7 @@ linux/
 macos/
 web/
 windows/
+backup/
 
 # IntelliJ related
 *.iml

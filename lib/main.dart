@@ -1,13 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gacha_anonymous/account/AuthProvider.dart';
+import 'package:gacha_anonymous/account/ProfilePage.dart';
+import 'package:gacha_anonymous/account/RegisterPage.dart';
 
 import 'account/LoginPage.dart';
+import 'chat/ContactsPage.dart';
 import 'home/HomePage.dart';
 
 Future main() async {
   try{
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    AuthProvider.initAuth();
     runApp(const MyApp());
   } catch (e) {
     print(e);
@@ -27,8 +32,9 @@ class MyApp extends StatelessWidget {
 
 class TabItem {
   String title;
+  Widget wg;
 
-  TabItem(this.title);
+  TabItem( this.title, this.wg );
 }
 
 class GachaAnon extends StatefulWidget {
@@ -39,15 +45,40 @@ class GachaAnon extends StatefulWidget {
 class _GachaAnonState extends State<GachaAnon> {
   int _selectedIndex = 1;
 
-  static List<TabItem> bottomTabs = [
-    TabItem('Login'),
-    TabItem('Home'),
-  ];
+  static late List<TabItem> bottomTabs;
 
-  static List<Widget> widgetOptions = <Widget>[
-    LoginPage(),
-    HomePage(),
-  ];
+  static late List<Widget> widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(AuthProvider.isLoggedIn()) {
+      bottomTabs = [
+        TabItem('Profile', ProfilePage()),
+        TabItem('Chat', ContactsPage()),
+        TabItem('Home', HomePage()),
+      ];
+
+      widgetOptions = <Widget>[
+        ProfilePage(),
+        ContactsPage(),
+        HomePage(),
+      ];
+
+      _selectedIndex = 2;
+    } else {
+      bottomTabs = [
+        TabItem('Login', LoginPage()),
+        TabItem('Home', HomePage()),
+      ];
+
+      widgetOptions = <Widget>[
+        LoginPage(),
+        HomePage(),
+      ];
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
