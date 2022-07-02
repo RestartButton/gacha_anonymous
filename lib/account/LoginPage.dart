@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gacha_anonymous/main.dart';
+import 'package:provider/provider.dart';
+import 'AuthProvider.dart';
 import 'RegisterPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +13,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late final AuthProvider _authProvider;
 
   void callRegisterPage(BuildContext context) {
     Navigator.push(
@@ -18,6 +22,26 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => RegisterPage()
       )
     );
+  }
+
+  void initState() {
+    super.initState();
+
+    _authProvider = Provider.of<AuthProvider>(context);
+  }
+
+  void _login() async {
+    if(await _authProvider.singIn(nameController.text, passwordController.text)) {
+      Navigator.replace(
+        context, 
+        oldRoute: MaterialPageRoute(
+          builder: (context) => LoginPage()
+        ),
+        newRoute: MaterialPageRoute(
+          builder: (context) => GachaAnon()
+        )
+      );
+    }
   }
 
   @override
@@ -71,8 +95,7 @@ class _LoginPageState extends State<LoginPage> {
             child: ElevatedButton(
               child: const Text('Entrar'),
               onPressed: () {
-                print(nameController.text);
-                print(passwordController.text);
+                _login();
               },
             ),
           ),

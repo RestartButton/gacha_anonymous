@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'AuthProvider.dart';
 
 class RegisterPage extends StatefulWidget {
-    @override
-    _RegisterPageState createState() => _RegisterPageState();
+  const RegisterPage({Key? key}) : super(key: key);
+
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
 class AwaysDisabledFocus extends FocusNode {
@@ -12,6 +17,7 @@ class AwaysDisabledFocus extends FocusNode {
 
 class _RegisterPageState extends State<RegisterPage> {
   DateTime date = DateTime.now();
+  late final AuthProvider _authProvider;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -23,11 +29,21 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
 
     dateController.text = '${date.day}/${date.month}/${date.year}';
+    _authProvider = Provider.of<AuthProvider>(context);
   }
 
-    @override
+  void _register() async {
+    if(passwordController.text == confirmController.text) {
+      if(await _authProvider.createAccount(emailController.text, passwordController.text)) {
+
+      }
+    } else {
+      print('As senhas precisam ser iguais.');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -37,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(10),
-              child: Text('Cadastrar')
+              child: const Text('Cadastrar'),
 
             ),
             Container(
@@ -101,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: ElevatedButton(
                 child: const Text('Enviar'),
                 onPressed: () {
-
+                  _register();
                 },
               ),
             ),
