@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gacha_anonymous/main.dart';
-import 'AuthProvider.dart';
+import '../services/auth.dart';
 import 'RegisterPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -23,20 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() async {
-    if(await AuthProvider.singIn(nameController.text, passwordController.text)) {
-      Navigator.pushReplacement(
-          context, 
-          PageRouteBuilder(
-            transitionDuration: Duration.zero,
-            pageBuilder: (_,__,___) => GachaAnon(),
-          )
-        );
+    if(await AuthService.singIn(nameController.text, passwordController.text)) {
+      resetApp(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ListView(

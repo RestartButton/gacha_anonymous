@@ -1,22 +1,41 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:gacha_anonymous/account/AuthProvider.dart';
-import 'package:gacha_anonymous/account/ProfilePage.dart';
-import 'package:gacha_anonymous/account/RegisterPage.dart';
+import 'package:gacha_anonymous/services/database.dart';
 
-import 'account/LoginPage.dart';
-import 'chat/ContactsPage.dart';
-import 'home/HomePage.dart';
+import 'services/auth.dart';
+import 'views/ProfilePage.dart';
+import 'views/LoginPage.dart';
+import 'views/ContactsPage.dart';
+import 'views/HomePage.dart';
+
+final List<String> nicks = [
+  "Cavalo",
+  "Pato",
+];
+final List<String> names = [
+  "Azul",
+  "Grande",
+];
 
 Future main() async {
   try{
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-    AuthProvider.initAuth();
+    AuthService.initAuth();
+    DatabaseMethods.initDatabase();
     runApp(const MyApp());
   } catch (e) {
     print(e);
   }
+}
+
+void resetApp(dynamic context) {
+  Navigator.pushReplacement(
+    context, 
+    PageRouteBuilder(
+      pageBuilder: (_,__,___) => GachaAnon()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -46,14 +65,13 @@ class _GachaAnonState extends State<GachaAnon> {
   int _selectedIndex = 1;
 
   static late List<TabItem> bottomTabs;
-
   static late List<Widget> widgetOptions;
 
   @override
   void initState() {
     super.initState();
 
-    if(AuthProvider.isLoggedIn()) {
+    if(AuthService.isLoggedIn()) {
       bottomTabs = [
         TabItem('Profile', ProfilePage()),
         TabItem('Chat', ContactsPage()),

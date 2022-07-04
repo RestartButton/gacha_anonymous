@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:gacha_anonymous/services/auth.dart';
+import 'package:gacha_anonymous/services/database.dart';
 
 import '../main.dart';
-import 'AuthProvider.dart';
+import '../services/auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -32,14 +36,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _register() async {
     if(passwordController.text == confirmController.text) {
-      if(await AuthProvider.createAccount(emailController.text, passwordController.text)) {
-        Navigator.pushReplacement(
-          context, 
-          PageRouteBuilder(
-            transitionDuration: Duration.zero,
-            pageBuilder: (_,__,___) => GachaAnon(),
-          )
-        );
+      if(await AuthService.createAccount(emailController.text, passwordController.text)) {
+        DatabaseMethods.updateUser(AuthService.auth.currentUser?.uid,{
+          "birthdate": Timestamp.fromDate(date),
+          "nick": nicks[Random().nextInt(nicks.length)],
+          "name": names[Random().nextInt(names.length)],
+        });
+        resetApp(context);
       }
     } else {
       print('As senhas precisam ser iguais.');

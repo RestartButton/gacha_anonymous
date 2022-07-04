@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gacha_anonymous/main.dart';
 
-class AuthProvider {
+class AuthService {
 
   static late FirebaseAuth _auth;
-  late FirebaseFirestore firebaseFirestore;
+  static FirebaseAuth get auth => _auth;
 
-  static void initAuth() async {
-    _auth = await FirebaseAuth.instance;
+  static void initAuth() {
+    _auth = FirebaseAuth.instance;
   }
 
   static  Future<bool> createAccount(email, password) async {
@@ -42,6 +43,14 @@ class AuthProvider {
     if(user != null) return true;
 
     return false;
+  }
+
+  static Future deleteUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      await user.delete();
+    }
+      
   }
 
 }
