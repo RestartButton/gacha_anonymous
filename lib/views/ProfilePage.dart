@@ -6,8 +6,6 @@ import '../services/database.dart';
 import '../services/auth.dart';
 import 'RegisterPage.dart';
 
-
-
 class ProfilePage extends StatefulWidget {
     @override
     _ProfilePageState createState() => _ProfilePageState();
@@ -19,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late DateTime _birthdate;
 
 
-  Future _pushUserInfo() async {
+  Future _pullUserInfo() async {
     _userInfo = await DatabaseMethods.getUserInfo();
 
     _birthdate = DateTime.parse(_userInfo["birthdate"].toDate().toString());
@@ -30,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     
     super.initState();
-    _pushUserInfo();
+    _pullUserInfo();
 
   }
 
@@ -38,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _pushUserInfo(),
+      future: _pullUserInfo(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         switch(snapshot.connectionState) {
           case ConnectionState.none: return const Text("No preferences");
@@ -99,9 +97,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         ElevatedButton(
                           child: const Text('Sair'),
-                          onPressed: () {
+                          onPressed: () async {
                             
-                            AuthService.singOut();
+                            await AuthService.singOut();
                             resetApp(context);
                             
                           },
@@ -116,9 +114,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             'Excluir Conta'
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             
-                            DatabaseMethods.deleteUser();
+                            await DatabaseMethods.deleteUser();
                             resetApp(context);
                             
                           },

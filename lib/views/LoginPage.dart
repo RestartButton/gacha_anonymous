@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gacha_anonymous/main.dart';
+
+import '../main.dart';
 import '../services/auth.dart';
 import 'RegisterPage.dart';
 

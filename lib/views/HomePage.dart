@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gacha_anonymous/main.dart';
-import 'package:gacha_anonymous/services/auth.dart';
-import 'package:gacha_anonymous/services/database.dart';
+
+import '../main.dart';
+import '../services/database.dart';
+import '../services/auth.dart';
 import 'EditingPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,7 +30,9 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(top: 4), 
             child: Text(post["content"])
           ),
-          post["id_creator"] == AuthService.auth.currentUser?.uid 
+          !AuthService.isLoggedIn() 
+          ? SizedBox(height: 10,)
+          : post["id_creator"] == AuthService.auth.currentUser?.uid 
           ? Center( 
             child: Row(
               children: [
@@ -63,16 +66,52 @@ class _HomePageState extends State<HomePage> {
               ],
             )
           )
-          : const SizedBox(height: 2,),
+          : Center(
+            child: Row(
+              children: [
+                ElevatedButton(
+                  child: const Text('Adicionar Contato'),
+                  onPressed: () {
+
+                    _addContact(post["id_creator"]);
+
+                  },
+                ),
+              ],
+            ),
+          ),
           const Divider(thickness: 4,),  
         ],
       )
     );
   }
 
-  Future _pushFeed() async {
+  Future<void> _addContact(String idContact) async {
+
+    bool existContact = false;
+
+    await DatabaseMethods.db.collection("users").doc(AuthService.auth.currentUser?.uid)
+    .collection("chats").where("id_contact", isEqualTo: idContact).get().then(
+      (value) => {
+        for(var e in value.docs){
+          if(e.data()["id_contact"] == idContact) {
+            existContact = true
+          },
+          if(!existContact) {
+            DatabaseMethods.addContact(idContact)
+          } else {
+            print("Contato ja registrado.")
+          }
+        }, 
+      }
+    );
+
+  }
+
+  Future _pullFeed() async {
     try{
-      var postsSnapshot = await DatabaseMethods.db.collection("posts").get();
+      feed = [];
+      var postsSnapshot = await DatabaseMethods.db.collection("posts").orderBy("post_time", descending: true).get();
       for(var postDocumentSnapshot in postsSnapshot.docs) {
         Map<String, dynamic> postData = postDocumentSnapshot.data();
         await DatabaseMethods.db.collection("users").doc(postData["id_creator"]).get().then(
@@ -90,7 +129,7 @@ class _HomePageState extends State<HomePage> {
     
     if(!AuthService.isLoggedIn()) {
       return FutureBuilder(
-        future:_pushFeed(),
+        future:_pullFeed(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none: return const Text("No preferences");
@@ -106,7 +145,7 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return FutureBuilder(
-        future:_pushFeed(),
+        future:_pullFeed(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none: return const Text("No preferences");
@@ -124,6 +163,10 @@ class _HomePageState extends State<HomePage> {
                             controller: postController,
                             style: TextStyle(
                               fontSize: 20,
+                            ),
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: "Escreva...",
                             ),
                           )
                         ),

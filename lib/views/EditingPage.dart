@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+
 import '../services/database.dart';
 
 class EditingPage extends StatefulWidget {
@@ -29,35 +30,50 @@ class _EditingPageState extends State<EditingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container( 
-        padding: const EdgeInsets.only(top: 25),
-        child: Stack(
+      appBar: AppBar(
+        title: Text(""),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              scrollPadding: EdgeInsets.all(20.0),
+              keyboardType: TextInputType.multiline,
+              maxLines: 99999,
+              autofocus: true,
               controller: postContentController,
               style: const TextStyle(
                 fontSize: 20,
               ),
             ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Expanded(
-                child: ElevatedButton(
-                  child: const Text(
-                    'Salvar'
-                  ),
-                  onPressed: () {
-                    
-                    DatabaseMethods.updatePost(postId, postContentController.text);
-                    Navigator.pop(context);
-                    
-                  },
-                )
-              )
-            )
-          ],
+          ]
         )
-      )
+      ), 
+      bottomNavigationBar: Container(
+        height: 83,
+        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.bottomRight,
+        padding: EdgeInsets.only(right: 8, bottom: 8),
+        child: ElevatedButton(
+          
+          child: const Text(
+            'Salvar'
+          ),
+          style: ElevatedButton.styleFrom(
+            fixedSize: const Size(75, 75),
+            shape: const CircleBorder(),
+          ),
+          onPressed: () {
+            
+            DatabaseMethods.updatePost(postId, postContentController.text);
+            Navigator.pop(context);
+            
+          },
+        )
+      ),
+      extendBodyBehindAppBar: false,
+      resizeToAvoidBottomInset: true,
     );
   }
 }

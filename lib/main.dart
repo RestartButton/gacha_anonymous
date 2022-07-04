@@ -1,20 +1,30 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:gacha_anonymous/services/database.dart';
 
+import 'services/database.dart';
 import 'services/auth.dart';
-import 'views/ProfilePage.dart';
-import 'views/LoginPage.dart';
 import 'views/ContactsPage.dart';
 import 'views/HomePage.dart';
+import 'views/LoginPage.dart';
+import 'views/ProfilePage.dart';
 
 final List<String> nicks = [
-  "Cavalo",
-  "Pato",
+  "Cavalo", "Jaguar", "Lontra", "Galinha",
+  "Pato", "Puma", "Ganso", "Formiga",
+  "Tigre", "Cachorro", "Gato", "Iguana",
+  "Barata", "Girafa", "Peixe", "Golfinho",
+  "Salamandra", "Jumento", "Burro", "Lagarto",
+  "Bola", "Caneta", "Mesa", "Caderno",
+  "Teclado", "Camiseta", "Fogo", "Porta",
+  "Tambor", "Quadro", "Telefone", "Folha",
+  "Roda", "Mochila", "Roupa", "Garrafa",
+  "Janela", "Adesivo", "Gaveta", "Jarra",
 ];
 final List<String> names = [
-  "Azul",
-  "Grande",
+  "Azul", "Preto(a)", "Verde", "Cinza", "Transparente"
+  "Grande", "Pequeno(a)", "Torto(a)", "Quadrado(a)", "Redondo(a)"
+  "Legal", "Chato(a)", "Frio(a)", "Bravo(a)", "Tranquilo(a)",
+  "de Madeira", "de Pano", "de Metal", "de Brincar", "de Tinta",
 ];
 
 Future main() async {

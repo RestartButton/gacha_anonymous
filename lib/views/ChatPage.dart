@@ -1,24 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gacha_anonymous/services/database.dart';
-import '../services/auth.dart';
+
 import '../main.dart';
+import '../services/database.dart';
+import '../services/auth.dart';
 
 class ChatPage extends StatefulWidget {
-  String idContact, idChat;
+  String contactName, idContact, idChat;
 
-  ChatPage(this.idContact, this.idChat);
+  ChatPage(this.contactName, this.idContact, this.idChat);
 
   @override
-  _ChatPageState createState() => _ChatPageState(idContact, idChat);
+  _ChatPageState createState() => _ChatPageState(contactName, idContact, idChat);
 }
 
 class _ChatPageState extends State<ChatPage> {
-  String? idUser, idContact, idChat;
+  String? idUser, idContact, idChat, contactName;
   TextEditingController messageContentController = TextEditingController();
   late var _messageStream;
 
-  _ChatPageState( this.idContact, this.idChat );
+  _ChatPageState( this.contactName, this.idContact, this.idChat );
 
   Widget chatMessages() {
     return StreamBuilder<QuerySnapshot>(
@@ -32,7 +33,7 @@ class _ChatPageState extends State<ChatPage> {
               message: message["content"], 
               sendByMe: idUser == message["id_sender"]
             );
-          } ,
+          },
         ) : Container();
       },
     );
@@ -53,11 +54,10 @@ class _ChatPageState extends State<ChatPage> {
   _getMessages() {
     if(idChat != null) {
       if(idChat != "") {
-        return DatabaseMethods.db.collection("chats").doc(idChat).collection("messages").snapshots();  
-      }
-      
+        return DatabaseMethods.db.collection("chats").doc(idChat).collection("messages")
+        .orderBy("sent_time",descending: false).snapshots();  
+      } 
     }
-
   }
 
   _addMessage() {
@@ -83,6 +83,18 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
+      backgroundColor: Color(0x28FFFFFF),
+      appBar: AppBar(
+        backgroundColor:const Color(0xff2A75BC),
+        title: Text(
+          contactName == null ? "Desconhecido" : contactName as String,
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        elevation: 0.0,
+        centerTitle: true,
+      ),
       body: Container(
         child: Stack(
           children: [
@@ -94,23 +106,21 @@ class _ChatPageState extends State<ChatPage> {
                 .size
                 .width,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                decoration: const BoxDecoration(
-                  color: Color(0x0FFFFFFF),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                color: Color(0x54CCCCCC),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         controller: messageContentController,
                         style: const TextStyle(
-                          color: Color(0x36FFFFFF), 
+                          color: Colors.white, 
                           fontSize: 16
                         ),
                         decoration: const InputDecoration(
                           hintText: "Mensagem...",
                           hintStyle: TextStyle(
-                            color: Color(0x36FFFFFF),
+                            color: Colors.white,
                             fontSize: 16,
                           ),
                           border: InputBorder.none,
@@ -128,8 +138,8 @@ class _ChatPageState extends State<ChatPage> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                               Color(0x36FFFFFF),
-                               Color(0x0FFFFFFF)
+                               Color(0x36CCCCCC),
+                               Color(0x0FCCCCCC)
                             ],
                             begin: FractionalOffset.topLeft,
                             end: FractionalOffset.bottomRight,
@@ -137,7 +147,10 @@ class _ChatPageState extends State<ChatPage> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                         padding: const EdgeInsets.all(12),
-                        child: const Text(" > ", style: TextStyle( fontSize: 20 )),
+                        child: Image.asset(
+                          "assets/images/send.png",
+                          height: 25, width: 25,
+                        ),//Text(" > ", style: TextStyle( fontSize: 20 )),
                       ),
                     )
                   ],
@@ -146,7 +159,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ],
         )
-      )
+      ),
     );
   }
 }
@@ -199,8 +212,8 @@ class MessageTile extends StatelessWidget {
                 const Color(0xff2A75BC)
               ]
                   : [
-                const Color(0x1AFFFFFF),
-                const Color(0x1AFFFFFF)
+                const Color(0x1ACCCCCC),
+                const Color(0x1ACCCCCC)
               ],
             )
         ),

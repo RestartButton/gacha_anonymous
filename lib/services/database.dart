@@ -1,7 +1,6 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gacha_anonymous/services/auth.dart';
+
+import 'auth.dart';
 
 class DatabaseMethods{
 

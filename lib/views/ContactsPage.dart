@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
+import '../main.dart';
 import '../services/database.dart';
 import '../services/auth.dart';
-import '../main.dart';
 import 'ChatPage.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -11,7 +12,7 @@ class ContactsPage extends StatefulWidget {
 
 class _ContactsPageState extends State<ContactsPage> {
   late final String? idUser;
-  List<Widget> contacts = [];
+  List<Widget> _contacts = [];
 
   @override
   void initState() {
@@ -24,23 +25,37 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   Widget _dataToWidget(String idContact, dynamic contact, String idChat) {
-    return  TextButton(
-      onPressed: ()  {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatPage(idContact, idChat)
+    return  Column(
+      children: [
+        Container( 
+          color: const Color(0xff007EF4), 
+          child: TextButton(
+            onPressed: ()  {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatPage("${contact["nick"]} ${contact["name"]}", idContact, idChat)
+                )
+              );
+            },
+            child: ListTile(
+              title: Text(
+                "${contact["nick"]} ${contact["name"]}",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            )
           )
-        );
-      },
-      child: ListTile(
-        title: Text("${contact["nick"]} ${contact["name"]}"),
-      )
+        ), 
+        Divider(thickness: 4,)
+      ]
     );
   }
 
-  Future _pushContacts() async {
+  Future _pullContacts() async {
     try{
+      _contacts = [];
       var contactsSnapshot = await DatabaseMethods.db.collection("contacts").where("id_user", isEqualTo: idUser).get();
       for(var contactDocumentSnapshot in contactsSnapshot.docs) {
         Map<String, dynamic> contactData = contactDocumentSnapshot.data();
@@ -49,7 +64,7 @@ class _ContactsPageState extends State<ContactsPage> {
         for(var  chatDocumentSnapshot in chatSnapshot.docs)  {
           Map<String,dynamic> chatData = chatDocumentSnapshot.data();
           await DatabaseMethods.db.collection("users").doc(contactData['id_contact']).get().then(
-            (value) => contacts.add(_dataToWidget(contactData['id_contact'], value.data(), chatData["id"]))
+            (value) => _contacts.add(_dataToWidget(contactData['id_contact'], value.data(), chatData["id"]))
           );
         }
         
@@ -63,7 +78,7 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     
     return FutureBuilder(
-      future:_pushContacts(),
+      future:_pullContacts(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none: return const Text("No preferences");
@@ -73,7 +88,7 @@ class _ContactsPageState extends State<ContactsPage> {
             : Column(
                   children: [
                   Container(padding: const EdgeInsets.only(top: 25), child: Center(child: Text("Contacts")),),
-                  ListView(shrinkWrap: true, children: contacts),
+                  ListView(shrinkWrap: true, children: _contacts),
                 ],
               );
         }

@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:gacha_anonymous/services/auth.dart';
-import 'package:gacha_anonymous/services/database.dart';
 
-import '../main.dart';
+import '../services/database.dart';
 import '../services/auth.dart';
+import '../main.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
