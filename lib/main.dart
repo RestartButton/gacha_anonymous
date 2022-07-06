@@ -114,14 +114,53 @@ class _GachaAnonState extends State<GachaAnon> {
     });
   }
 
-  List<BottomNavigationBarItem> getBottomTabs(List<TabItem> tabs) {
-    return tabs
-      .map((item) =>
-        BottomNavigationBarItem(
-          icon: Container(height: 0.0,),
-          label: item.title,
-        ),
+  Widget _getButton(TabItem item) {
+    return item.title == 'Chat' 
+      ? Container(
+        height: 75,
+        alignment: Alignment.bottomCenter,
+        padding: EdgeInsets.symmetric(vertical: 4),
+        child: ElevatedButton(
+          child: Text(
+            item.title
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFF56705F),
+            fixedSize: const Size(100,75),
+            shape: const CircleBorder(),
+          ),
+          onPressed: () {
+            _onItemTapped(bottomTabs.indexOf(item));
+          }, 
+        )
       )
+      : Container(
+          height: 60,
+          padding: AuthService.isLoggedIn() 
+          ? EdgeInsets.symmetric(horizontal: 10) 
+          : EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          alignment: item.title == 'Home' ? Alignment.bottomRight : Alignment.bottomLeft,
+          child: ElevatedButton(
+            child: Text(
+              item.title,
+            ),
+            style: ElevatedButton.styleFrom(
+              padding: AuthService.isLoggedIn() 
+              ? EdgeInsets.symmetric(horizontal: 30) 
+              : EdgeInsets.symmetric(horizontal: 50),
+              primary: item.title == 'Home' ? Color(0xFFCC1CCF) : Color(0xFF080595),
+            ),
+            onPressed: () {
+              _onItemTapped(bottomTabs.indexOf(item));
+            },
+        )
+      );
+
+  }
+
+  List<Widget> _getBottomTabs(List<TabItem> tabs) {
+    return tabs
+      .map((item) => _getButton(item))
       .toList();
   }
 
@@ -133,11 +172,26 @@ class _GachaAnonState extends State<GachaAnon> {
       ), 
       
 
-      bottomNavigationBar: BottomNavigationBar(
-        items: getBottomTabs(bottomTabs),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+
+          gradient: const LinearGradient(
+            colors: [
+                Colors.white70,
+                Colors.white54,
+                Colors.white30,
+            ],
+            begin: FractionalOffset.topLeft,
+            end: FractionalOffset.bottomRight,
+          ),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        child: Stack( 
+          children: _getBottomTabs(bottomTabs)
+        ),
       ),
+      backgroundColor: Color(0xFFC4C4C4),
     );
   }
 }

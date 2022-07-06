@@ -28,7 +28,11 @@ class _ContactsPageState extends State<ContactsPage> {
     return  Column(
       children: [
         Container( 
-          color: const Color(0xff007EF4), 
+          margin: EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF080595), 
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
           child: TextButton(
             onPressed: ()  {
               Navigator.push(
@@ -48,7 +52,7 @@ class _ContactsPageState extends State<ContactsPage> {
             )
           )
         ), 
-        Divider(thickness: 4,)
+        SizedBox(height: 4,)
       ]
     );
   }
@@ -86,11 +90,27 @@ class _ContactsPageState extends State<ContactsPage> {
           default: 
             return snapshot.hasError ? Text("Erro: ${snapshot.error}") 
             : Column(
-                  children: [
-                  Container(padding: const EdgeInsets.only(top: 25), child: Center(child: Text("Contacts")),),
-                  ListView(shrinkWrap: true, children: _contacts),
-                ],
-              );
+              children: [
+                Padding(
+                  padding: EdgeInsets.only( top: 10 ),
+                  child: Container(
+                    padding: const EdgeInsets.only( top: 25 ), 
+                    child: Center(
+                      child: Text(
+                        "Contacts",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      )
+                    ),
+                  )
+                ),
+                ListView(
+                  shrinkWrap: true, 
+                  children: _contacts
+                ),
+              ],
+            );
         }
       }
     );

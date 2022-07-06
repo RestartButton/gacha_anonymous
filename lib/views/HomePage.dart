@@ -16,7 +16,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _dataToWidget(String postId,dynamic post, dynamic user) {
     return Container(
-      padding: const EdgeInsets.only(top: 8),
+      margin: EdgeInsets.all(4),
+      color: Color(0xFF56705F),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Column(
         children: <Widget> [
           Container(
@@ -28,8 +30,14 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             padding: const EdgeInsets.only(top: 4), 
-            child: Text(post["content"])
+            child: Text(
+              post["content"],
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            )
           ),
+          //const Divider(thickness: 4,), 
           !AuthService.isLoggedIn() 
           ? SizedBox(height: 10,)
           : post["id_creator"] == AuthService.auth.currentUser?.uid 
@@ -37,6 +45,9 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFCC1CCF),
+                  ),
                   child: const Text('Editar'),
                   onPressed: () {
                     Navigator.push(
@@ -47,6 +58,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
+                SizedBox(width: (MediaQuery.of(context).size.width - 160),),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red,
@@ -70,6 +82,9 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFCC1CCF),
+                  ),
                   child: const Text('Adicionar Contato'),
                   onPressed: () {
 
@@ -80,7 +95,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          const Divider(thickness: 4,),  
+           
         ],
       )
     );
@@ -156,33 +171,53 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(top:30),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
+                    Container( 
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      child: Column(
+                        children: [
+                          TextField(
+                            maxLines: 3,
                             controller: postController,
                             style: TextStyle(
                               fontSize: 20,
                             ),
                             decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
+                              filled: true,
+                              fillColor: Colors.white,
+                              //border: OutlineInputBorder(),
                               hintText: "Escreva...",
+                              
                             ),
-                          )
-                        ),
-                        ElevatedButton(
-                          child: const Text('Publicar'),
-                          onPressed: () async {
-                            
-                            await DatabaseMethods.createPost(postController.text, 
-                              AuthService.auth.currentUser?.uid as String);
-                            postController.text = "";
-                            resetApp(context);
-                            
-                          },
-                        ),
+                          ),
+                          Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(top: 15),
+                                child: Divider(thickness: 4,)
+                              ),
+                              Container(
+                                alignment: Alignment.bottomRight,
+                                child: ElevatedButton(
 
-                      ],
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFCC1CCF),
+                                  ),
+                                  child: const Text('Publicar'),
+                                  onPressed: () async {
+                                    
+                                    await DatabaseMethods.createPost(postController.text, 
+                                      AuthService.auth.currentUser?.uid as String);
+                                    postController.text = "";
+                                    resetApp(context);
+                                    
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: ListView(

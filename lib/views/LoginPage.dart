@@ -54,7 +54,9 @@ class _LoginPageState extends State<LoginPage> {
             child: TextField(
               controller: nameController,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+                //border: OutlineInputBorder(),
                 labelText: 'Usuário',
               ),
             )
@@ -65,7 +67,9 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
               controller: passwordController,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+                //border: OutlineInputBorder(),
                 labelText: 'Senha',
               ),
             ),
@@ -77,6 +81,9 @@ class _LoginPageState extends State<LoginPage> {
             height: 50,
             padding: const EdgeInsets.fromLTRB(10,0,10,0),
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFCC1CCF)
+              ),
               child: const Text('Entrar'),
               onPressed: () {
                 _login();
@@ -90,6 +97,9 @@ class _LoginPageState extends State<LoginPage> {
             height: 50,
             padding: const EdgeInsets.fromLTRB(10,0,10,0),
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF080595)
+              ),
               child: const Text('Registrar'),
               onPressed: () {
                 callRegisterPage(context);

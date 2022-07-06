@@ -30,10 +30,39 @@ class _EditingPageState extends State<EditingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC4C4C4),
       appBar: AppBar(
+        backgroundColor: Color(0xFF080595),
         title: Text(""),
       ),
-      body: SingleChildScrollView(
+      body: EditingInput(postContentController),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Salvar',
+        child: const Text(
+          'Salvar'
+        ),
+        backgroundColor: Color(0xFF080595),
+        onPressed: () {
+          
+          DatabaseMethods.updatePost(postId, postContentController.text);
+          Navigator.pop(context);
+          
+        },
+      ),
+    );
+  }
+}
+
+
+
+class EditingInput extends StatelessWidget {
+  TextEditingController controller;
+  EditingInput(this.controller);
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -42,38 +71,18 @@ class _EditingPageState extends State<EditingPage> {
               keyboardType: TextInputType.multiline,
               maxLines: 99999,
               autofocus: true,
-              controller: postContentController,
+              controller: controller,
               style: const TextStyle(
                 fontSize: 20,
+              ),
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
               ),
             ),
           ]
         )
-      ), 
-      bottomNavigationBar: Container(
-        height: 83,
-        width: MediaQuery.of(context).size.width,
-        alignment: Alignment.bottomRight,
-        padding: EdgeInsets.only(right: 8, bottom: 8),
-        child: ElevatedButton(
-          
-          child: const Text(
-            'Salvar'
-          ),
-          style: ElevatedButton.styleFrom(
-            fixedSize: const Size(75, 75),
-            shape: const CircleBorder(),
-          ),
-          onPressed: () {
-            
-            DatabaseMethods.updatePost(postId, postContentController.text);
-            Navigator.pop(context);
-            
-          },
-        )
-      ),
-      extendBodyBehindAppBar: false,
-      resizeToAvoidBottomInset: true,
-    );
+      );
+
   }
 }

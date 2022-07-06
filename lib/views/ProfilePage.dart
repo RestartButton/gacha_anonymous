@@ -47,37 +47,53 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: const EdgeInsets.only(top: 30),
               child: Column( 
                 children: [
-                  Container( 
-                    alignment: Alignment.topCenter,
-                    child: const Text( "ProfilePage", style: TextStyle( fontSize: 15 ), ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Container( 
+                      padding: EdgeInsets.only(top: 10),
+                      alignment: Alignment.topCenter,
+                      child: const Text( "ProfilePage", style: TextStyle( fontSize: 15 ), ),
+                    )
                   ),
                   Column(
                     children: [
                       Container(  
+                        padding: EdgeInsets.only(left: 10, top: 20),
                         alignment: Alignment.topLeft,
-                        child: Text("${_userInfo["nick"]} ${_userInfo["name"]}", style: TextStyle( fontSize: 15 ),),
+                        child: Text(
+                          "Apelido: \n\t\t\t\t${_userInfo["nick"]} ${_userInfo["name"]}", 
+                          style: TextStyle( fontSize: 20 ),
+                        ),
                       ),
                       const SizedBox(height: 50,),
-                      TextField(
-                        focusNode: AwaysDisabledFocus(),
-                        controller: _dateController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Data Nasc.",
-                        ),
-                        onTap: () async {
-                          DateTime? newDate = await showDatePicker(
-                            context: context, 
-                            initialDate: _birthdate, 
-                            firstDate: DateTime(1900), 
-                            lastDate: DateTime.now(),
-                          );
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: TextField(
+                          focusNode: AwaysDisabledFocus(),
+                          controller: _dateController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            //border: OutlineInputBorder(),
+                            labelText: "Data Nasc.",
+                            labelStyle: TextStyle(
+                              //backgroundColor: Colors.white
+                            )
+                          ),
+                          onTap: () async {
+                            DateTime? newDate = await showDatePicker(
+                              context: context, 
+                              initialDate: _birthdate, 
+                              firstDate: DateTime(1900), 
+                              lastDate: DateTime.now(),
+                            );
 
-                          if(newDate == null) return;
-                          _birthdate = newDate;
-                          _dateController.text = '${newDate.day}/${newDate.month}/${newDate.year}';
-                          _userInfo["birthdate"] = Timestamp.fromDate(newDate);
-                        },
+                            if(newDate == null) return;
+                            _birthdate = newDate;
+                            _dateController.text = '${newDate.day}/${newDate.month}/${newDate.year}';
+                            _userInfo["birthdate"] = Timestamp.fromDate(newDate);
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -87,6 +103,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       children: [
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF080595),
+                          ), 
                           child: const Text('Salvar'),
                           onPressed: () {
                             
@@ -96,6 +115,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF080595),
+                          ), 
                           child: const Text('Sair'),
                           onPressed: () async {
                             

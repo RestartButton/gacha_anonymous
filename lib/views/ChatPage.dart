@@ -21,6 +21,7 @@ class _ChatPageState extends State<ChatPage> {
 
   _ChatPageState( this.contactName, this.idContact, this.idChat );
 
+
   Widget chatMessages() {
     return StreamBuilder<QuerySnapshot>(
       stream: _messageStream,
@@ -85,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       backgroundColor: Color(0x28FFFFFF),
       appBar: AppBar(
-        backgroundColor:const Color(0xff2A75BC),
+        backgroundColor:const Color(0xFF080595),
         title: Text(
           contactName == null ? "Desconhecido" : contactName as String,
           style: TextStyle(
@@ -114,16 +115,21 @@ class _ChatPageState extends State<ChatPage> {
                       child: TextField(
                         controller: messageContentController,
                         style: const TextStyle(
-                          color: Colors.white, 
+                          color: Colors.black, 
                           fontSize: 16
                         ),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+
                           hintText: "Mensagem...",
                           hintStyle: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 16,
                           ),
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
                         ),
                       ),
                     ),
@@ -138,8 +144,8 @@ class _ChatPageState extends State<ChatPage> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                               Color(0x36CCCCCC),
-                               Color(0x0FCCCCCC)
+                               Color(0xFF080595),
+                               Color(0xFF080595)
                             ],
                             begin: FractionalOffset.topLeft,
                             end: FractionalOffset.bottomRight,
@@ -208,12 +214,12 @@ class MessageTile extends StatelessWidget {
               ),
             gradient: LinearGradient(
               colors: sendByMe ? [
-                const Color(0xff007EF4),
-                const Color(0xff2A75BC)
+                const Color(0xFF56705F),
+                const Color(0xFF56705F)
               ]
                   : [
-                const Color(0x1ACCCCCC),
-                const Color(0x1ACCCCCC)
+                const Color(0xFFCC1CCF),
+                const Color(0xFFCC1CCF)
               ],
             )
         ),

@@ -51,6 +51,17 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC4C4C4),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Cadastrar",
+          style: TextStyle(
+            color: Colors.white
+          )
+        ),
+        backgroundColor: Color(0xFF080595),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(
@@ -59,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(10),
-              child: const Text('Cadastrar'),
+              child: const Text(''),
 
             ),
             Container(
@@ -67,7 +78,9 @@ class _RegisterPageState extends State<RegisterPage> {
               child: TextField(
                 controller: emailController,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  //border: OutlineInputBorder(),
                   labelText: 'Email',
                 ),
               ),
@@ -78,7 +91,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: true,
                 controller: passwordController,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  //border: OutlineInputBorder(),
                   labelText: 'Senha',
                 ),
               ),
@@ -89,7 +104,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: true,
                 controller: confirmController,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  //border: OutlineInputBorder(),
                   labelText: 'Repetir Senha',
                 ),
               ),
@@ -115,7 +132,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   });
                 },
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  //border: OutlineInputBorder(),
                   labelText: 'Data Nasc.',
                 ),
               ),
@@ -123,6 +142,9 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFCC1CCF)
+                ),
                 child: const Text('Enviar'),
                 onPressed: () {
                   _register();
@@ -132,6 +154,9 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF080595)
+                ),
                 child: const Text('Voltar'),
                 onPressed: () {
                   Navigator.of(context).pop();
